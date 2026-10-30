@@ -9,7 +9,6 @@
 # col    = the column index (0-8)
 # number = the number we want to place (1-9)
 
-
 def is_valid_move(grid, row, col, number):
 
     # Check the entire row.
@@ -142,8 +141,49 @@ solutions = []
 solve(grid, 0, 0, solutions)
 
 # --------------------------------------------------
-# STEP 5: PRINT THE RESULTS
+# STEP 5: CREATE A FANCY SUDOKU GRID
 # --------------------------------------------------
+
+# Define a function that prints a completed Sudoku grid using lines to seperate rows/colums/blocks.
+def print_sudoku(solution):
+
+    # Print the top border of the Sudoku grid.
+    # The double-line characters seperate the 3x3 blocks.
+    print("╔═══════╦═══════╦═══════╗")
+
+    # Loop through each row in the Sudoku solution. 
+    # enumerate() gives us both the row index and the row itself.
+    for row_index, row in enumerate(solution):
+
+        # Print the left border of the grid.
+        # end = " " keeps the next output on the same line.
+        print("║", end=" ")
+
+        # Loop through each number in the current row.
+        # enumerate() gives us both the column incex and the number.
+        for col_index, number in enumerate(row):
+
+            # Print the current numbers followed by a space.
+            print(number, end=" ")
+
+            # Check wheter we have reached the end of a 3x3 block. 
+            # % 3 == 0 means the column index (counting from 1) is dividable by 3. 
+            if (col_index + 1) % 3 == 0:
+                print("║", end=" ")
+
+        # Move to new line after printing all numbers in the row.
+        print()
+
+        # Check whether we have reached the end of a 3x3 block vertically.
+        if (row_index + 1) % 3 == 0:
+
+            # If this is the last row (row index 8), print the bottom border of the Sudoku grid.
+            if row_index == 8:
+                print("╚═══════╩═══════╩═══════╝")
+
+            # Otherwise, print a horizontal separator between the 3x3 blocks.
+            else:
+                print("╠═══════╬═══════╬═══════╣")
 
 # Check how many solutions were found.
 if len(solutions) == 0:
@@ -156,32 +196,17 @@ else:
     # Print the total number of solutions.
     print(f"Antal möjliga lösningar: {len(solutions)}")
 
-    # Check wheter the Sudoku has one or multiple solutions.
+    # Check whether the Sudoku has one or multiple solutions.
     if len(solutions) == 1:
-        print("Sudokun har en unik lösning")
+        print("Sudokun har en unik lösning.")
     else:
-        print("Sudokun har flera möjliga lösningar")
+        print("Sudokun har flera möjliga lösningar.")
 
     # Go through every solution in the solutions list.
-    #
-    # enumerate() gives us both:
-    # - solution_number: the solution's position
-    # - solution: the actual completed Sudoku grid
-    #
-    # start=1 makes the numbering begin at 1 instead of 0.
     for solution_number, solution in enumerate(solutions, start=1):
 
-        # Print the amount of possible solutions.
+        # Print the solution number.
         print(f"\nLösning {solution_number}:")
 
-        # Print the Sokudo grid row by row.
-        for i in range(9):
-
-            # Print each number in the row.
-            # end=" " keeps the numbers on the same line. 
-            for j in range(9):
-                print(solution[i][j], end=" ")
-
-            # Move to a new line after each row.     
-            print()
-
+        # Print the Sudoku grid with double-line borders.
+        print_sudoku(solution)
